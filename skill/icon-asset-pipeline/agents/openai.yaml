@@ -1,0 +1,4 @@
+interface:
+  display_name: "Icon Asset Pipeline"
+  short_description: "Generate, extract, normalize, and package icon assets"
+  default_prompt: "Use $icon-asset-pipeline to turn this icon sheet or prompt into production-ready PNG, WebP, sprite sheet, ZIP, and metadata assets."

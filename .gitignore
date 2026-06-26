@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# OS/editor files
+.DS_Store
+.idea/
+.vscode/
+
+# Generated icon outputs
+work/
+outputs/
+export/
+*.zip
+*.webp
+*.png
+*.jpg
+*.jpeg
+*.tif
+*.tiff
+!docs/**/*.png
+!docs/**/*.jpg
+!docs/**/*.jpeg
+!skill/**/assets/**

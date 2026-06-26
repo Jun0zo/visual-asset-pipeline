@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "icon-asset-pipeline"
+version = "0.1.0"
+description = "Generate, extract, normalize, validate, and package production-ready icon assets."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+  { name = "Icon Asset Pipeline Contributors" }
+]
+keywords = [
+  "icons",
+  "asset-pipeline",
+  "computer-vision",
+  "sprite-sheet",
+  "figma",
+  "react",
+  "flutter",
+  "ios",
+  "android",
+  "game-assets"
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Intended Audience :: End Users/Desktop",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Multimedia :: Graphics",
+  "Topic :: Software Development :: Build Tools"
+]
+dependencies = [
+  "Pillow>=10.0",
+  "numpy>=1.24",
+  "scikit-image>=0.21"
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0"
+]
+enhanced = [
+  "rembg>=2.0"
+]
+
+[project.scripts]
+icon-asset-pipeline = "icon_asset_pipeline.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/your-org/icon-asset-pipeline"
+Repository = "https://github.com/your-org/icon-asset-pipeline"
+Issues = "https://github.com/your-org/icon-asset-pipeline/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
