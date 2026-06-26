@@ -3,17 +3,22 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "icon-asset-pipeline"
+name = "visual-asset-pipeline"
 version = "0.1.0"
-description = "Generate, extract, normalize, validate, and package production-ready icon assets."
+description = "Generate, extract, normalize, validate, and package production-ready visual assets."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
 authors = [
-  { name = "Icon Asset Pipeline Contributors" }
+  { name = "Visual Asset Pipeline Contributors" }
 ]
 keywords = [
   "icons",
+  "visual-assets",
+  "characters",
+  "sprites",
+  "web-assets",
+  "ui-assets",
   "asset-pipeline",
   "computer-vision",
   "sprite-sheet",
@@ -50,12 +55,13 @@ enhanced = [
 ]
 
 [project.scripts]
-icon-asset-pipeline = "icon_asset_pipeline.cli:main"
+visual-asset-pipeline = "visual_asset_pipeline.cli:main"
+vap = "visual_asset_pipeline.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/your-org/icon-asset-pipeline"
-Repository = "https://github.com/your-org/icon-asset-pipeline"
-Issues = "https://github.com/your-org/icon-asset-pipeline/issues"
+Homepage = "https://github.com/your-org/visual-asset-pipeline"
+Repository = "https://github.com/your-org/visual-asset-pipeline"
+Issues = "https://github.com/your-org/visual-asset-pipeline/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

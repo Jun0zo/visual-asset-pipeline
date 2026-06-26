@@ -1,113 +1,196 @@
-# Icon Asset Pipeline
+# Visual Asset Pipeline
 
-Generate, extract, repair, normalize, validate, name, and package production-ready icon assets from either a text prompt or a single image sheet.
+![Visual Asset Pipeline hero](docs/assets/hero.png)
 
-This repository contains two deliverables:
+**Visual Asset Pipeline** turns prompts, dense asset sheets, webpage captures, sketches, and folders of images into production-ready asset packages for design tools, apps, websites, and game engines.
 
-- A Python package and CLI for deterministic icon extraction and packaging.
-- A bundled Codex Skill under `skill/icon-asset-pipeline` for AI-assisted workflows.
+[English](README.md) | [한국어](README.ko.md) | [日本語](docs/i18n/README.ja.md) | [简体中文](docs/i18n/README.zh-CN.md) | [Español](docs/i18n/README.es.md)
 
-## Current Status
+> Status: alpha. The local pipeline is working, modular, and test-covered for smoke extraction. Model-backed segmentation, semantic naming, OCR, and SVG conversion are designed as replaceable adapters.
 
-Alpha-quality architecture with a working local computer-vision pipeline. The default implementation uses conservative heuristics so it can run without hosted services. Production deployments can replace individual modules with SAM, rembg, CLIP/DINOv2, OCR, or a vectorization service.
+## What It Handles
 
-## Features
+Visual Asset Pipeline is not limited to icons. Icons are one supported profile.
 
-- Analyze icon sheets: background, layout hints, spacing, possible text, estimated count.
-- Locate icons visually without relying purely on equal grids.
-- Smart crop with adaptive padding for glows, outlines, shadows, and antialiasing.
-- Remove simple backgrounds and export transparent PNG.
-- Cleanup text-like captions, guide lines, tiny noise, and background residue.
-- Normalize to square canvases at `128`, `256`, `512`, `1024`, or custom sizes.
-- Validate edge cropping, blur, duplicate icons, text-like artifacts, style variance, and alpha quality.
-- Generate semantic filenames from prompt/category/color/shape hints.
-- Export PNG, WebP, sprite sheets, metadata, validation reports, contact sheet, and ZIP archive.
-- Optionally attempt SVG export when a vectorizer such as `vtracer` is installed.
+- Icons and symbol packs
+- Character sheets and pose boards
+- Sprite sheets and game props
+- Webpage or landing-page visual assets
+- UI badges, buttons, state variants, and app assets
+- Stickers, decals, emotes, and transparent cutouts
+
+![Asset profiles](docs/assets/asset-profiles.png)
+
+## Pipeline
+
+![Pipeline flow](docs/assets/pipeline-flow.png)
+
+1. Analyze input: layout, background, text, spacing, grid hints, and expected count.
+2. Locate assets visually: do not rely only on equal grid cells.
+3. Segment foreground: remove backgrounds while preserving antialiasing, shadows, outlines, and glows.
+4. Cleanup: remove captions, labels, numbers, guide lines, and small artifacts.
+5. Normalize: use profile-aware padding, optical centering, and requested export sizes.
+6. Validate: flag cropped edges, blur, duplicates, text residue, background artifacts, and style variance.
+7. Package: export PNG, WebP, optional SVG, sprite sheets, metadata, validation reports, contact sheet, and ZIP.
+
+## Output Package
+
+![Output package](docs/assets/package-outputs.png)
+
+Each run can produce:
+
+- `png/<size>/*.png`
+- `webp/<size>/*.webp`
+- `svg/*.svg` when a vectorizer is available
+- `sprites/sprite_<size>.png`
+- `sprites/sprite_<size>.json`
+- `metadata.json`
+- `validation_report.json`
+- `contact_sheet.png`
+- `visual_asset_package.zip`
+
+The output is intended for Figma, React, Flutter, iOS, Android, web apps, Unity, Godot, and other game engines.
 
 ## Install
 
 ```bash
+git clone https://github.com/your-org/visual-asset-pipeline.git
+cd visual-asset-pipeline
 python3 -m venv .venv
 source .venv/bin/activate
 python3 -m pip install -e ".[dev]"
 ```
 
-## CLI Usage
-
-Create a generation brief:
+Verify the install:
 
 ```bash
-icon-asset-pipeline brief \
-  --prompt "Create 48 forest exploration icons in watercolor style." \
-  --output work/forest-icons
+visual-asset-pipeline --help
+pytest
 ```
 
-Extract a generated or supplied icon sheet:
+The short alias is also available:
 
 ```bash
-icon-asset-pipeline extract \
-  --input work/forest-icons/generated-sheet.png \
-  --output work/forest-icons/export \
+vap --help
+```
+
+## Quick Start
+
+Create a generation brief from a prompt:
+
+```bash
+visual-asset-pipeline brief \
   --prompt "Create 48 forest exploration icons in watercolor style." \
+  --profile icon \
+  --output work/forest-assets
+```
+
+Generate an image sheet from `work/forest-assets/generation_brief.json` with your image model, then extract assets:
+
+```bash
+visual-asset-pipeline extract \
+  --input work/forest-assets/generated-sheet.png \
+  --output work/forest-assets/export \
+  --prompt "Create 48 forest exploration icons in watercolor style." \
+  --profile icon \
   --expected-count 48 \
   --sizes 128,256,512,1024
 ```
 
-Normalize a folder of already-separated icons:
+Normalize a folder of already-separated assets:
 
 ```bash
-icon-asset-pipeline normalize \
-  --input work/raw-icons \
-  --output work/normalized-icons \
+visual-asset-pipeline normalize \
+  --input work/raw-assets \
+  --output work/normalized-assets \
+  --profile web \
   --sizes 256,512
 ```
 
-## Project Structure
-
-```text
-.
-├── src/icon_asset_pipeline/      # Replaceable pipeline modules
-├── tests/                        # Smoke tests and future quality tests
-├── scripts/                      # Thin CLI wrapper for local runs
-├── docs/                         # Architecture, library recommendations, naming notes
-└── skill/icon-asset-pipeline/    # Codex Skill bundle
-```
-
-## Module Boundaries
-
-- `analysis`: input inspection and layout metadata.
-- `detection`: icon localization from visual components.
-- `segmentation`: foreground masks and background removal.
-- `cleanup`: captions, guide lines, artifacts, and noise removal.
-- `normalization`: optical centering and canvas export.
-- `validation`: quality gates, duplicates, and style consistency checks.
-- `naming`: deterministic semantic filename generation.
-- `packaging`: image exports, sprite sheets, metadata, reports, and ZIP archive.
-
-## Tests
+Package a character sheet:
 
 ```bash
-pytest
+visual-asset-pipeline extract \
+  --input work/character-sheet.png \
+  --output work/character-pack \
+  --profile character \
+  --expected-count 12 \
+  --sizes 512,1024
 ```
+
+## Asset Profiles
+
+| Profile | Best for | Normalization intent |
+| --- | --- | --- |
+| `icon` | Symbol packs, app icons, badges | Square canvas, centered symbol, consistent padding |
+| `character` | Character poses, mascots, avatar sheets | Preserve full body, align visual weight, avoid cropped limbs |
+| `sprite` | Game frames, props, effects | Frame-ready scale, sprite sheet export, atlas metadata |
+| `web` | Landing-page images, logos, illustrations | Preserve useful shape, responsive export sizes |
+| `ui` | Buttons, badges, states, app visuals | Group variants and keep state-friendly naming |
+| `sticker` | Stickers, emotes, decals | Preserve outline/glow and generous transparent padding |
+| `auto` | Unknown or mixed sheets | Use conservative general-purpose extraction |
 
 ## Codex Skill
 
-The installable Skill is in `skill/icon-asset-pipeline`. To use it as a local Codex Skill, copy that folder into your Codex skills directory:
+The installable Codex Skill is included at `skill/visual-asset-pipeline`.
+
+Install it locally:
 
 ```bash
-cp -R skill/icon-asset-pipeline "${CODEX_HOME:-$HOME/.codex}/skills/"
+cp -R skill/visual-asset-pipeline "${CODEX_HOME:-$HOME/.codex}/skills/"
 ```
 
-## Naming
+Then invoke it in Codex with:
 
-The working repository name is `icon-asset-pipeline` because it is descriptive and search-friendly. See `docs/name-candidates.md` for stronger product/open-source name options.
+```text
+Use $visual-asset-pipeline to extract this character sheet into transparent PNG, WebP, sprite sheet, ZIP, and metadata.
+```
+
+## Architecture
+
+```text
+src/visual_asset_pipeline/
+├── analysis.py        # input inspection and layout metadata
+├── detection.py       # visual asset localization
+├── segmentation.py    # foreground masks and background removal
+├── cleanup.py         # captions, guide lines, artifacts, and noise
+├── normalization.py   # optical centering and profile-aware canvas export
+├── validation.py      # quality gates, duplicates, and style checks
+├── naming.py          # deterministic semantic filenames
+├── packaging.py       # image exports, metadata, reports, sprites, ZIP
+└── cli.py             # command line interface
+```
+
+More detail:
+
+- [Architecture](docs/architecture.md)
+- [Library recommendations](docs/library-recommendations.md)
+- [Name candidates](docs/name-candidates.md)
+
+## Optional Enhancements
+
+The default pipeline runs locally with Pillow, NumPy, and scikit-image. Production deployments can swap in:
+
+- SAM, RMBG, or rembg for segmentation
+- CLIP, SigLIP, DINOv2, or a multimodal LLM for semantic naming and duplicate detection
+- OCR for stronger caption and label removal
+- vtracer, potrace, Illustrator, or a hosted vectorization service for SVG output
+- Figma, React, Flutter, iOS, Android, Unity, Godot, and TexturePacker code generators
+
+## Development
+
+```bash
+python3 -m pip install -e ".[dev]"
+pytest
+python scripts/generate_readme_assets.py
+```
 
 ## Roadmap
 
-- Model-backed semantic naming and duplicate detection.
-- SAM/rembg segmentation adapter.
-- OCR-backed caption removal.
-- True SVG/vector export pipeline.
-- Figma component export.
-- React, Flutter, iOS asset catalog, Android drawable, Unity, Godot, and TexturePacker codegen.
-- Visual regression benchmark suite for real-world icon sheets.
+- Profile-specific metadata: pivots, hitboxes, 9-slice, state groups, animation groups.
+- Model-backed extraction adapters.
+- True vector export pipeline.
+- Multimodal semantic naming review UI.
+- Figma plugin export.
+- Framework and game-engine codegen.
+- Visual regression benchmark suite with real-world asset sheets.

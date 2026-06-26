@@ -2,49 +2,37 @@
 
 ## Recommendation
 
-Use `icon-asset-pipeline` for the first public repository. It is plain, searchable, and accurately describes the tool. Use a stronger product name later if the project grows into a hosted app or designer-facing product.
+Use `visual-asset-pipeline` for the public repository. It is descriptive, searchable, and broad enough for icons, characters, sprites, UI assets, web assets, and stickers.
 
-## Strong Candidates
+Use a shorter product name only if this becomes a hosted product or designer-facing app.
 
-1. `icon-forge`
-   - Short, memorable, and implies generation plus refinement.
-   - Best if the tool becomes a broader icon creation product.
+## Strong Product Names
 
-2. `iconpack-forge`
-   - More specific than `icon-forge`.
-   - Good fit for prompt-to-pack and sheet-to-pack workflows.
+1. `asset-forge`
+   - Best overall product name. Broad, memorable, and clear.
 
-3. `asset-forge`
-   - Broader than icons.
-   - Good if the pipeline expands into UI/game assets, stickers, badges, and atlases.
+2. `visual-foundry`
+   - Professional and designer-friendly.
 
-4. `glyphsmith`
-   - Polished and brandable.
-   - Better for a design tool than a pure engineering package.
+3. `asset-foundry`
+   - Strong production-tool signal.
 
-5. `sprite-smith`
-   - Strong game-engine signal.
-   - Less ideal if Figma/app icon workflows remain the main audience.
+4. `packsmith`
+   - Good for asset-pack generation and packaging.
 
-6. `atlasmint`
-   - Nice for sprite sheets and game asset atlases.
-   - Less obvious for designers searching for icon extraction.
+5. `atlasmint`
+   - Strong game/sprite-sheet signal.
 
-7. `icon-foundry`
-   - Clear and professional.
-   - Strong fit for production asset generation.
-
-8. `packsmith`
-   - Broad asset-pack positioning.
-   - Needs subtitle/context to make the icon use case clear.
+6. `icon-forge`
+   - Good if the project later narrows back toward icon generation.
 
 ## Practical Repo Name Shortlist
 
-- `icon-asset-pipeline`
-- `iconpack-forge`
-- `icon-foundry`
-- `icon-forge`
+- `visual-asset-pipeline`
+- `asset-forge`
+- `visual-foundry`
+- `asset-foundry`
 
 ## Suggested Positioning Line
 
-> Generate, extract, normalize, validate, and package production-ready icon assets from prompts or icon sheets.
+> Generate, extract, normalize, validate, and package production-ready visual assets from prompts, sheets, screenshots, and folders.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Visual Asset Pipeline"
+  short_description: "Generate, extract, normalize, and package visual assets"
+  default_prompt: "Use $visual-asset-pipeline to turn this asset sheet, character sheet, sprite sheet, icon pack, or prompt into production-ready PNG, WebP, sprite sheet, ZIP, and metadata assets."
