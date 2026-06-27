@@ -181,6 +181,7 @@ class AssetRecord:
     """Fully processed visual asset and metadata used during packaging."""
 
     candidate: AssetCandidate
+    crop_box: BoundingBox
     name: str
     clean_width: int
     clean_height: int

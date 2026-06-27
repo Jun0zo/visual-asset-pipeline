@@ -37,8 +37,10 @@
 
 ## 설치
 
+### Python
+
 ```bash
-git clone https://github.com/your-org/visual-asset-pipeline.git
+git clone https://github.com/Jun0zo/visual-asset-pipeline.git
 cd visual-asset-pipeline
 python3 -m venv .venv
 source .venv/bin/activate
@@ -57,6 +59,23 @@ pytest
 ```bash
 vap --help
 ```
+
+### npm / npx
+
+npm 패키지는 Python 파이프라인을 실행하는 작은 Node.js CLI wrapper를 제공합니다. 설치 시 가능하면 패키지 내부 `.venv`를 만들고 Python dependency를 설치합니다.
+
+```bash
+npm install -g github:Jun0zo/visual-asset-pipeline
+vap --help
+```
+
+한 번만 실행하려면:
+
+```bash
+npx --yes github:Jun0zo/visual-asset-pipeline --help
+```
+
+Python 환경을 직접 관리하고 싶다면 `VAP_SKIP_PYTHON_INSTALL=1`을 설정한 뒤 npm install을 실행하면 됩니다.
 
 ## 빠른 사용 예시
 
@@ -103,7 +122,14 @@ visual-asset-pipeline normalize \
 - `metadata.json`
 - `validation_report.json`
 - `contact_sheet.png`
+- `crop_preview.png`
 - `visual_asset_package.zip`
+
+## Crop Preview Overlay
+
+![Crop preview overlay](docs/assets/crop-preview-overlay.png)
+
+추출을 실행하면 export 폴더에 `crop_preview.png`도 함께 생성됩니다. 빨간 박스는 padding이 적용된 최종 crop 영역이고, 옅은 흰 박스는 원래 detection 영역입니다. 번호는 metadata와 연결되므로 어떤 에셋이 어떻게 잘릴지 바로 확인할 수 있습니다.
 
 ## Codex Skill 설치
 
@@ -136,5 +162,5 @@ Use $visual-asset-pipeline to extract this character sheet into transparent PNG,
 ```bash
 python3 -m pip install -e ".[dev]"
 pytest
-python scripts/generate_readme_assets.py
+npm pack --dry-run
 ```

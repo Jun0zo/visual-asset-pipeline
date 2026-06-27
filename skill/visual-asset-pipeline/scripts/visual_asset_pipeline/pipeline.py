@@ -16,11 +16,11 @@ from .segmentation import foreground_mask
 from .validation import dominant_colors, find_duplicates, style_validation, validate_asset
 
 
-def _crop_with_adaptive_padding(image: Image.Image, box: BoundingBox) -> Image.Image:
+def _crop_with_adaptive_padding(image: Image.Image, box: BoundingBox) -> tuple[Image.Image, BoundingBox]:
     width, height = image.size
     pad = max(8, int(round(max(box.w, box.h) * 0.18)))
     padded = box.expand(pad).clamp(width, height)
-    return image.crop((padded.x, padded.y, padded.x2, padded.y2))
+    return image.crop((padded.x, padded.y, padded.x2, padded.y2)), padded
 
 
 def _dedupe(records: list[AssetRecord], threshold: int) -> tuple[list[AssetRecord], list[dict[str, str]]]:
@@ -36,6 +36,7 @@ def _dedupe(records: list[AssetRecord], threshold: int) -> tuple[list[AssetRecor
 
 def _record_from_candidate(
     candidate: AssetCandidate,
+    crop_box: BoundingBox,
     clean_crop: Image.Image,
     normalized_images: dict[int, Image.Image],
     name: str,
@@ -47,6 +48,7 @@ def _record_from_candidate(
     issues = validate_asset(name, largest)
     return AssetRecord(
         candidate=candidate,
+        crop_box=crop_box,
         name=name,
         clean_width=clean_crop.size[0],
         clean_height=clean_crop.size[1],
@@ -69,11 +71,13 @@ def run_extract_pipeline(input_path: Path, output_dir: Path, config: PipelineCon
     clean_crops: list[Image.Image] = []
     normalized_sets: list[dict[int, Image.Image]] = []
     cleanup_notes_by_index: list[list[str]] = []
+    crop_boxes: list[BoundingBox] = []
     for candidate in candidates:
-        crop = _crop_with_adaptive_padding(image, candidate.box)
+        crop, crop_box = _crop_with_adaptive_padding(image, candidate.box)
         clean_crop, cleanup_notes = clean_asset_crop(crop, repair=config.repair)
         normalized = normalize_asset(clean_crop, config.normalized_sizes(), config.effective_padding_ratio())
         clean_crops.append(clean_crop)
+        crop_boxes.append(crop_box)
         normalized_sets.append(normalized)
         cleanup_notes_by_index.append(cleanup_notes)
 
@@ -82,17 +86,19 @@ def run_extract_pipeline(input_path: Path, output_dir: Path, config: PipelineCon
     records = [
         _record_from_candidate(
             candidate,
+            crop_box,
             clean_crop,
             normalized,
             name,
             config.prompt,
             cleanup_notes,
         )
-        for candidate, clean_crop, normalized, name, cleanup_notes in zip(
-            candidates, clean_crops, normalized_sets, names, cleanup_notes_by_index
+        for candidate, crop_box, clean_crop, normalized, name, cleanup_notes in zip(
+            candidates, crop_boxes, clean_crops, normalized_sets, names, cleanup_notes_by_index
         )
     ]
 
+    preview_records = records[:]
     records, excluded_duplicates = _dedupe(records, threshold=config.duplicate_threshold)
     style_report = style_validation(records)
     return write_package(
@@ -103,6 +109,7 @@ def run_extract_pipeline(input_path: Path, output_dir: Path, config: PipelineCon
         config=config,
         source_path=str(input_path),
         style_report=style_report,
+        preview_records=preview_records,
     )
 
 
@@ -152,7 +159,7 @@ def run_directory_pipeline(input_dir: Path, output_dir: Path, config: PipelineCo
     config.names_file = original_names_file
 
     for candidate, clean_crop, normalized, name in zip(candidates, clean_crops, normalized_sets, names):
-        records.append(_record_from_candidate(candidate, clean_crop, normalized, name, config.prompt, []))
+        records.append(_record_from_candidate(candidate, candidate.box, clean_crop, normalized, name, config.prompt, []))
 
     records, excluded_duplicates = _dedupe(records, threshold=config.duplicate_threshold)
     first = Image.open(image_paths[0]).convert("RGBA")

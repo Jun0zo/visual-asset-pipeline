@@ -49,14 +49,23 @@ Each run can produce:
 - `metadata.json`
 - `validation_report.json`
 - `contact_sheet.png`
+- `crop_preview.png`
 - `visual_asset_package.zip`
 
 The output is intended for Figma, React, Flutter, iOS, Android, web apps, Unity, Godot, and other game engines.
 
+## Crop Preview Overlay
+
+![Crop preview overlay](docs/assets/crop-preview-overlay.png)
+
+Extraction runs write `crop_preview.png` beside the exported assets. Red boxes show the final padded crop area, faint white boxes show the raw visual detection, and numbered labels map the preview back to metadata. This makes it obvious when a cut is too tight before the files move into Figma, apps, or game engines.
+
 ## Install
 
+### Python
+
 ```bash
-git clone https://github.com/your-org/visual-asset-pipeline.git
+git clone https://github.com/Jun0zo/visual-asset-pipeline.git
 cd visual-asset-pipeline
 python3 -m venv .venv
 source .venv/bin/activate
@@ -75,6 +84,23 @@ The short alias is also available:
 ```bash
 vap --help
 ```
+
+### npm / npx
+
+The npm package provides a small Node.js CLI wrapper around the Python pipeline. On install, it tries to create a package-local Python virtual environment and install the Python dependencies there.
+
+```bash
+npm install -g github:Jun0zo/visual-asset-pipeline
+vap --help
+```
+
+For one-off usage:
+
+```bash
+npx --yes github:Jun0zo/visual-asset-pipeline --help
+```
+
+Set `VAP_SKIP_PYTHON_INSTALL=1` before `npm install` if you want to manage the Python environment yourself.
 
 ## Quick Start
 
@@ -184,7 +210,7 @@ The default pipeline runs locally with Pillow, NumPy, and scikit-image. Producti
 ```bash
 python3 -m pip install -e ".[dev]"
 pytest
-python scripts/generate_readme_assets.py
+npm pack --dry-run
 ```
 
 ## Roadmap

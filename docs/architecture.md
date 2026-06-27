@@ -45,7 +45,7 @@
 - `validation.find_duplicates`: Use a deterministic perceptual hash to flag duplicate assets.
 - `validation.style_validation`: Compare palette, alpha coverage, stroke-density proxy, and lighting/shadow proxies across the pack.
 - `naming.generate_asset_names`: Create stable semantic filenames from optional names, prompt/category hints, and visual descriptors.
-- `packaging.write_package`: Export PNG, WebP, optional SVG, sprite sheets, metadata, validation reports, contact sheet, and ZIP.
+- `packaging.write_package`: Export PNG, WebP, optional SVG, sprite sheets, metadata, validation reports, contact sheet, crop preview overlay, and ZIP.
 - `pipeline.run_extract_pipeline`: Orchestrate analysis, detection, cleanup, normalization, validation, naming, and packaging.
 
 ## Replaceable Components

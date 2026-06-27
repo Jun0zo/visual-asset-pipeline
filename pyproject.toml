@@ -59,9 +59,9 @@ visual-asset-pipeline = "visual_asset_pipeline.cli:main"
 vap = "visual_asset_pipeline.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/your-org/visual-asset-pipeline"
-Repository = "https://github.com/your-org/visual-asset-pipeline"
-Issues = "https://github.com/your-org/visual-asset-pipeline/issues"
+Homepage = "https://github.com/Jun0zo/visual-asset-pipeline"
+Repository = "https://github.com/Jun0zo/visual-asset-pipeline"
+Issues = "https://github.com/Jun0zo/visual-asset-pipeline/issues"
 
 [tool.setuptools.packages.find]
 where = ["src"]

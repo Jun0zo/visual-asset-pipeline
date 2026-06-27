@@ -42,6 +42,16 @@ Name
 Package
 ```
 
+## 빨간 Crop Preview
+
+추출 결과에는 `crop_preview.png`가 포함됩니다.
+
+- 빨간 박스: 실제로 잘라낼 최종 crop 영역
+- 옅은 흰 박스: 먼저 탐지된 원래 에셋 경계
+- 번호: metadata의 에셋 순서와 연결
+
+이 이미지를 보면 “어디가 잘릴지”를 바로 확인할 수 있습니다. 디자이너가 Figma로 가져가기 전에, 개발자가 sprite sheet로 묶기 전에 crop이 너무 타이트한지 한눈에 판단할 수 있게 하려는 장치입니다.
+
 ## 1. Analyze
 
 입력 이미지를 먼저 분석합니다.
@@ -139,6 +149,7 @@ profile마다 기준이 다릅니다.
 - `metadata.json`
 - `validation_report.json`
 - `contact_sheet.png`
+- `crop_preview.png`
 - `visual_asset_package.zip`
 
 목표는 Figma, React, Flutter, iOS, Android, Web, Unity, Godot 같은 환경에서 수동 정리 없이 바로 가져다 쓰는 것입니다.

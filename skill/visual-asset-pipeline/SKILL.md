@@ -16,8 +16,9 @@ Use this skill to turn prompt-generated sheets or source images containing many 
 3. For prompt-only work, run `brief`, generate the image sheet with the available image model, then run `extract`.
 4. For image input, inspect the image first. Note likely layout, background, text/captions, decorations, asset type, and expected count.
 5. Run `scripts/run_visual_pipeline.py`. Pass the user's original prompt with `--prompt` whenever available.
-6. Review `metadata.json`, `validation_report.json`, and `contact_sheet.png`. If validation flags cropped edges, captions, or artifacts, rerun with adjusted `--profile`, `--padding`, `--min-area-ratio`, or `--expected-count`.
-7. Return the ZIP plus important warnings. Do not claim SVG vectorization unless actual SVG files were produced.
+6. Review `metadata.json`, `validation_report.json`, `contact_sheet.png`, and `crop_preview.png`. In `crop_preview.png`, red boxes show the final padded crop area and faint white boxes show the raw detected bounds.
+7. If validation flags cropped edges, captions, or artifacts, rerun with adjusted `--profile`, `--padding`, `--min-area-ratio`, or `--expected-count`.
+8. Return the ZIP plus important warnings. Do not claim SVG vectorization unless actual SVG files were produced.
 
 ## Quick Start
 
@@ -65,6 +66,7 @@ python3 scripts/run_visual_pipeline.py normalize \
 ## Quality Rules
 
 - Never crop tightly. Preserve glows, outlines, shadows, and antialiasing.
+- Use `crop_preview.png` to make crop decisions visible before handing assets to Figma, apps, or game engines.
 - Treat grid detection as a hint, not truth.
 - Ignore labels, captions, and nearby decorative text whenever possible.
 - Prefer transparent PNG/WebP outputs for app and design usage.

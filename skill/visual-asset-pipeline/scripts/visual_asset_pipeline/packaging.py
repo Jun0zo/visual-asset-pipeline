@@ -10,7 +10,7 @@ from typing import Any
 
 from PIL import Image, ImageDraw
 
-from .models import AssetRecord, InputAnalysis, PipelineConfig
+from .models import AssetRecord, BoundingBox, InputAnalysis, PipelineConfig
 
 try:
     RESAMPLE_LANCZOS = Image.Resampling.LANCZOS
@@ -75,6 +75,57 @@ def _write_contact_sheet(records: list[AssetRecord], output_path: Path, size: in
     sheet.save(output_path)
 
 
+def _scale_box(box: BoundingBox, scale: float) -> tuple[int, int, int, int]:
+    return (
+        int(round(box.x * scale)),
+        int(round(box.y * scale)),
+        int(round(box.x2 * scale)),
+        int(round(box.y2 * scale)),
+    )
+
+
+def _write_crop_preview(source_path: str | None, records: list[AssetRecord], output_path: Path) -> str | None:
+    """Draw red crop overlays on top of the source image so users can inspect cuts."""
+
+    if not source_path or not records:
+        return None
+    path = Path(source_path)
+    if not path.exists() or not path.is_file():
+        return None
+
+    try:
+        source = Image.open(path).convert("RGBA")
+    except OSError:
+        return None
+
+    max_dimension = 1800
+    scale = min(1.0, max_dimension / max(source.size))
+    preview_size = (max(1, int(round(source.size[0] * scale))), max(1, int(round(source.size[1] * scale))))
+    preview = source.resize(preview_size, RESAMPLE_LANCZOS) if scale < 1.0 else source.copy()
+    overlay = Image.new("RGBA", preview.size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(overlay)
+    line_width = max(3, int(round(max(preview.size) / 360)))
+
+    for index, record in enumerate(records, start=1):
+        crop = _scale_box(record.crop_box, scale)
+        detected = _scale_box(record.candidate.box, scale)
+        draw.rectangle(detected, outline=(255, 255, 255, 150), width=max(1, line_width // 2))
+        draw.rectangle(crop, outline=(255, 30, 30, 255), width=line_width)
+        label = str(index)
+        label_box = draw.textbbox((0, 0), label)
+        label_w = label_box[2] - label_box[0] + 10
+        label_h = label_box[3] - label_box[1] + 8
+        label_x = max(0, crop[0])
+        label_y = max(0, crop[1] - label_h)
+        draw.rectangle((label_x, label_y, label_x + label_w, label_y + label_h), fill=(255, 30, 30, 230))
+        draw.text((label_x + 5, label_y + 4), label, fill=(255, 255, 255, 255))
+
+    composited = Image.alpha_composite(preview, overlay)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    composited.save(output_path)
+    return str(output_path)
+
+
 def _zip_dir(source_dir: Path, zip_path: Path) -> None:
     if zip_path.exists():
         zip_path.unlink()
@@ -93,6 +144,7 @@ def write_package(
     config: PipelineConfig,
     source_path: str | None,
     style_report: dict[str, Any],
+    preview_records: list[AssetRecord] | None = None,
 ) -> dict[str, Any]:
     """Export images, sprite sheets, metadata, reports, contact sheet, and ZIP."""
 
@@ -140,6 +192,7 @@ def write_package(
 
     contact_sheet = output_dir / "contact_sheet.png"
     _write_contact_sheet(records, contact_sheet)
+    crop_preview_path = _write_crop_preview(source_path, preview_records or records, output_dir / "crop_preview.png")
 
     category = config.category or _category_from_prompt(config.prompt)
     metadata = {
@@ -156,6 +209,7 @@ def write_package(
             "svg": str(svg_root) if config.svg and svg_root.exists() else None,
             "sprites": sprite_outputs,
             "contact_sheet": str(contact_sheet),
+            "crop_preview": crop_preview_path,
         },
         "assets": [],
         "excluded_duplicates": excluded_duplicates,
@@ -181,6 +235,7 @@ def write_package(
             "tags": record.tags,
             "dominant_colors": record.dominant_colors,
             "bounding_box": record.candidate.box.to_dict(),
+            "crop_box": record.crop_box.to_dict(),
             "canvas_size": list(config.normalized_sizes()),
             "source_candidate": record.candidate.to_dict(),
             "cleanup_notes": record.cleanup_notes,
@@ -211,6 +266,7 @@ def write_package(
         "validation_report": str(report_path),
         "zip": str(zip_path) if zip_path else None,
         "contact_sheet": str(contact_sheet),
+        "crop_preview": crop_preview_path,
         "asset_count": len(records),
         "warnings": validation_report["warnings"] + [{"code": "svg", "message": warning} for warning in svg_warnings],
     }

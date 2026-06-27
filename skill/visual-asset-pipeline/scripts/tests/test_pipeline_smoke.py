@@ -44,5 +44,9 @@ def test_extract_pipeline_smoke(tmp_path: Path) -> None:
     metadata = json.loads(Path(result["metadata"]).read_text(encoding="utf-8"))
     assert result["asset_count"] >= 4
     assert Path(result["zip"]).exists()
+    assert result["crop_preview"]
+    assert Path(result["crop_preview"]).exists()
     assert metadata["assets"]
+    assert metadata["exports"]["crop_preview"]
+    assert all("crop_box" in asset for asset in metadata["assets"])
     assert all(not asset["filename_base"].startswith("asset1") for asset in metadata["assets"])

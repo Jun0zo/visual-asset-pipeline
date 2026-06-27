@@ -15,7 +15,7 @@ Icons are only one profile. The pipeline also targets characters, sprites, web v
 ## Install
 
 ```bash
-git clone https://github.com/your-org/visual-asset-pipeline.git
+git clone https://github.com/Jun0zo/visual-asset-pipeline.git
 cd visual-asset-pipeline
 python3 -m venv .venv
 source .venv/bin/activate

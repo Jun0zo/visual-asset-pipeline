@@ -15,7 +15,7 @@ No se limita a iconos. Los iconos son solo un profile; tambien soporta personaje
 ## Instalacion
 
 ```bash
-git clone https://github.com/your-org/visual-asset-pipeline.git
+git clone https://github.com/Jun0zo/visual-asset-pipeline.git
 cd visual-asset-pipeline
 python3 -m venv .venv
 source .venv/bin/activate

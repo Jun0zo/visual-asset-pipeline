@@ -1,0 +1,60 @@
+{
+  "name": "visual-asset-pipeline",
+  "version": "0.1.0",
+  "description": "Generate, extract, normalize, validate, and package production-ready visual assets.",
+  "license": "MIT",
+  "author": "Visual Asset Pipeline Contributors",
+  "homepage": "https://github.com/Jun0zo/visual-asset-pipeline",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jun0zo/visual-asset-pipeline.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Jun0zo/visual-asset-pipeline/issues"
+  },
+  "keywords": [
+    "visual-assets",
+    "icons",
+    "sprites",
+    "figma",
+    "react",
+    "flutter",
+    "ios",
+    "android",
+    "game-assets",
+    "asset-pipeline"
+  ],
+  "bin": {
+    "visual-asset-pipeline": "./bin/visual-asset-pipeline.js",
+    "vap": "./bin/visual-asset-pipeline.js"
+  },
+  "files": [
+    "bin/",
+    "docs/**/*.md",
+    "docs/assets/*.png",
+    "docs/i18n/*.md",
+    "scripts/npm-postinstall.js",
+    "scripts/run_visual_pipeline.py",
+    "skill/visual-asset-pipeline/SKILL.md",
+    "skill/visual-asset-pipeline/agents/openai.yaml",
+    "skill/visual-asset-pipeline/references/**/*.md",
+    "skill/visual-asset-pipeline/scripts/requirements.txt",
+    "skill/visual-asset-pipeline/scripts/run_visual_pipeline.py",
+    "skill/visual-asset-pipeline/scripts/tests/**/*.py",
+    "skill/visual-asset-pipeline/scripts/visual_asset_pipeline/**/*.py",
+    "src/**/*.py",
+    "LICENSE",
+    "README.md",
+    "README.ko.md",
+    "pyproject.toml"
+  ],
+  "scripts": {
+    "postinstall": "node scripts/npm-postinstall.js",
+    "python:install": "python3 -m pip install -e .",
+    "test": "python3 -m pytest -q",
+    "pack:dry": "npm pack --dry-run"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
