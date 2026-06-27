@@ -25,6 +25,8 @@
 
 ![Pipeline flow](docs/assets/pipeline-flow.png)
 
+더 쉬운 설명은 [Visual Asset Pipeline 프로세스 설명](docs/process.ko.md)에 정리했습니다.
+
 1. 입력 분석: 레이아웃, 배경, 텍스트, 간격, grid 힌트, 예상 개수.
 2. 시각적 위치 탐지: 동일 grid만 믿지 않고 foreground component를 찾습니다.
 3. 분리/배경 제거: anti-aliasing, 그림자, outline, glow를 최대한 보존합니다.

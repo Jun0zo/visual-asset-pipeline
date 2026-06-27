@@ -25,6 +25,8 @@ Visual Asset Pipeline is not limited to icons. Icons are one supported profile.
 
 ![Pipeline flow](docs/assets/pipeline-flow.png)
 
+Korean process walkthrough: [Visual Asset Pipeline 프로세스 설명](docs/process.ko.md)
+
 1. Analyze input: layout, background, text, spacing, grid hints, and expected count.
 2. Locate assets visually: do not rely only on equal grid cells.
 3. Segment foreground: remove backgrounds while preserving antialiasing, shadows, outlines, and glows.
