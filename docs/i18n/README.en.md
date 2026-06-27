@@ -1,10 +1,10 @@
 # Visual Asset Pipeline
 
-![Visual Asset Pipeline hero](docs/assets/hero.png)
+![Visual Asset Pipeline hero](../assets/hero.png)
 
 **Visual Asset Pipeline** turns prompts, dense asset sheets, webpage captures, sketches, and folders of images into production-ready asset packages for design tools, apps, websites, and game engines.
 
-[한국어](../../README.md) | [English](README.en.md) | [日本語](README.ja.md) | [简体中文](README.zh-CN.md) | [Español](README.es.md)
+[English](../../README.md) | [한국어](../../README.ko.md) | [日本語](README.ja.md) | [简体中文](README.zh-CN.md) | [Español](README.es.md)
 
 > Status: alpha. The local pipeline is working, modular, and test-covered for smoke extraction. Model-backed segmentation, semantic naming, OCR, and SVG conversion are designed as replaceable adapters.
 
@@ -19,13 +19,13 @@ Visual Asset Pipeline is not limited to icons. Icons are one supported profile.
 - UI badges, buttons, state variants, and app assets
 - Stickers, decals, emotes, and transparent cutouts
 
-![Asset profiles](docs/assets/asset-profiles.png)
+![Asset profiles](../assets/asset-profiles.png)
 
 ## Pipeline
 
-![Pipeline flow](docs/assets/pipeline-flow.png)
+![Pipeline flow](../assets/pipeline-flow.png)
 
-Korean process walkthrough: [Visual Asset Pipeline 프로세스 설명](docs/process.ko.md)
+Korean process walkthrough: [Visual Asset Pipeline 프로세스 설명](../process.ko.md)
 
 1. Analyze input: layout, background, text, spacing, grid hints, and expected count.
 2. Locate assets visually: do not rely only on equal grid cells.
@@ -37,7 +37,7 @@ Korean process walkthrough: [Visual Asset Pipeline 프로세스 설명](docs/pro
 
 ## Output Package
 
-![Output package](docs/assets/package-outputs.png)
+![Output package](../assets/package-outputs.png)
 
 Each run can produce:
 
@@ -56,7 +56,7 @@ The output is intended for Figma, React, Flutter, iOS, Android, web apps, Unity,
 
 ## Crop Preview Overlay
 
-![Crop preview overlay](docs/assets/crop-preview-overlay.png)
+![Crop preview overlay](../assets/crop-preview-overlay.png)
 
 Extraction runs write `crop_preview.png` beside the exported assets. Red boxes show the final padded crop area, faint white boxes show the raw visual detection, and numbered labels map the preview back to metadata. This makes it obvious when a cut is too tight before the files move into Figma, apps, or game engines.
 
@@ -191,9 +191,9 @@ src/visual_asset_pipeline/
 
 More detail:
 
-- [Architecture](docs/architecture.md)
-- [Library recommendations](docs/library-recommendations.md)
-- [Name candidates](docs/name-candidates.md)
+- [Architecture](../architecture.md)
+- [Library recommendations](../library-recommendations.md)
+- [Name candidates](../name-candidates.md)
 
 ## Optional Enhancements
 

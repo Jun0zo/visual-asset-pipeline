@@ -25,9 +25,17 @@ function candidatePythons() {
   }
   if (process.platform === "win32") {
     candidates.push({ command: "py", prefix: ["-3"] });
+    candidates.push({ command: "py", prefix: ["-3.13"] });
+    candidates.push({ command: "py", prefix: ["-3.12"] });
+    candidates.push({ command: "py", prefix: ["-3.11"] });
+    candidates.push({ command: "py", prefix: ["-3.10"] });
     candidates.push({ command: "python", prefix: [] });
   } else {
     candidates.push({ command: "python3", prefix: [] });
+    candidates.push({ command: "python3.13", prefix: [] });
+    candidates.push({ command: "python3.12", prefix: [] });
+    candidates.push({ command: "python3.11", prefix: [] });
+    candidates.push({ command: "python3.10", prefix: [] });
     candidates.push({ command: "python", prefix: [] });
   }
   return candidates;
