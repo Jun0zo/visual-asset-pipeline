@@ -2,48 +2,40 @@
 
 ![Visual Asset Pipeline hero](docs/assets/hero.png)
 
-**Visual Asset Pipeline** turns prompts, dense asset sheets, webpage captures, sketches, and image folders into production-ready visual asset packages for design tools, apps, websites, and game engines.
+**Visual Asset Pipeline**은 프롬프트, 여러 에셋이 들어 있는 이미지 시트, 웹페이지 캡처, 스케치, 이미지 폴더를 바로 쓸 수 있는 프로덕션 에셋 패키지로 변환하는 파이프라인입니다.
 
-[English](README.md) | [한국어](README.ko.md) | [日本語](docs/i18n/README.ja.md) | [简体中文](docs/i18n/README.zh-CN.md) | [Español](docs/i18n/README.es.md)
+[한국어](README.md) | [English](docs/i18n/README.en.md) | [日本語](docs/i18n/README.ja.md) | [简体中文](docs/i18n/README.zh-CN.md) | [Español](docs/i18n/README.es.md)
 
-> Status: alpha. The local computer-vision pipeline works today, while model-backed segmentation, semantic naming, OCR, SVG conversion, and framework codegen are designed as replaceable adapters.
+> 현재 상태: alpha. 로컬 CV 기반 파이프라인은 동작하며, segmentation, semantic naming, OCR, SVG 변환은 교체 가능한 어댑터로 확장하도록 설계되어 있습니다.
 
-## What It Handles
+## 지원 범위
 
-Visual Asset Pipeline is not limited to icons. Icons are one profile among several production asset workflows.
+아이콘만을 위한 도구가 아닙니다. 아이콘은 여러 profile 중 하나입니다.
 
-- Icons, symbol packs, badges, and app assets
-- Character sheets, mascots, pose boards, and transparent cutouts
-- Sprite sheets, game props, effects, and atlas-ready frames
-- Webpage captures, landing-page visuals, logos, and illustrations
-- UI buttons, state variants, sticker packs, decals, and emotes
-- Existing image folders that need normalization, naming, validation, and packaging
+- 아이콘, 심볼 팩
+- 캐릭터 시트, 포즈 보드
+- 스프라이트 시트, 게임 오브젝트
+- 웹페이지/랜딩페이지 시각 에셋
+- UI 배지, 버튼, 상태 variant, 앱 에셋
+- 스티커, 이모트, 투명 컷아웃
 
 ![Asset profiles](docs/assets/asset-profiles.png)
 
-## Why It Is Different
-
-- It works from messy visual inputs, not only perfect grids.
-- It packages assets for real downstream use: PNG, WebP, optional SVG, sprites, metadata, validation reports, contact sheets, crop previews, and ZIP archives.
-- It preserves visual quality details such as antialiasing, shadows, outlines, glows, and optical centering.
-- It treats naming, validation, duplicate detection, and style consistency as part of the pipeline, not manual cleanup after export.
-- It is installable as a Codex skill, Python CLI, npm global CLI, and one-off `npx` command.
-
-## Pipeline
+## 파이프라인
 
 ![Pipeline flow](docs/assets/pipeline-flow.png)
 
-Korean process walkthrough: [Visual Asset Pipeline 프로세스 설명](docs/process.ko.md)
+더 쉬운 설명은 [Visual Asset Pipeline 프로세스 설명](docs/process.ko.md)에 정리했습니다.
 
-1. Analyze the input: layout, background, text, spacing, grid hints, and expected asset count.
-2. Locate assets visually: use foreground components instead of trusting equal grid cells.
-3. Segment foreground: remove backgrounds while preserving antialiasing, shadows, outlines, and glows.
-4. Clean crops: remove captions, labels, numbers, guide lines, and small artifacts.
-5. Normalize exports: apply profile-aware padding, optical centering, and requested sizes.
-6. Validate quality: flag cropped edges, blur, duplicates, text residue, background artifacts, and style variance.
-7. Package outputs: write PNG, WebP, optional SVG, sprite sheets, metadata, validation reports, contact sheet, crop preview, and ZIP.
+1. 입력 분석: 레이아웃, 배경, 텍스트, 간격, grid 힌트, 예상 개수.
+2. 시각적 위치 탐지: 동일 grid만 믿지 않고 foreground component를 찾습니다.
+3. 분리/배경 제거: anti-aliasing, 그림자, outline, glow를 최대한 보존합니다.
+4. 정리: 캡션, 라벨, 숫자, 가이드라인, 작은 노이즈를 제거합니다.
+5. 정규화: profile별 padding, optical center, 요청 size를 적용합니다.
+6. 검증: 잘림, blur, duplicate, 텍스트 잔여물, 배경 artifact, 스타일 편차를 감지합니다.
+7. 패키징: PNG, WebP, 선택 SVG, sprite sheet, metadata, validation report, contact sheet, ZIP을 만듭니다.
 
-## Install
+## 설치
 
 ### Python
 
@@ -55,14 +47,14 @@ source .venv/bin/activate
 python3 -m pip install -e ".[dev]"
 ```
 
-Verify:
+확인:
 
 ```bash
 visual-asset-pipeline --help
 pytest
 ```
 
-The short alias is also available:
+짧은 alias도 제공합니다.
 
 ```bash
 vap --help
@@ -70,24 +62,24 @@ vap --help
 
 ### npm / npx
 
-The npm package provides a small Node.js CLI wrapper around the Python pipeline. During install, it tries to create a package-local Python virtual environment and install the Python dependencies there.
+npm 패키지는 Python 파이프라인을 실행하는 작은 Node.js CLI wrapper를 제공합니다. 설치 시 가능하면 패키지 내부 `.venv`를 만들고 Python dependency를 설치합니다.
 
 ```bash
 npm install -g github:Jun0zo/visual-asset-pipeline
 vap --help
 ```
 
-For one-off use:
+한 번만 실행하려면:
 
 ```bash
 npx --yes github:Jun0zo/visual-asset-pipeline --help
 ```
 
-Set `VAP_SKIP_PYTHON_INSTALL=1` before `npm install` if you want to manage the Python environment yourself.
+Python 환경을 직접 관리하고 싶다면 `VAP_SKIP_PYTHON_INSTALL=1`을 설정한 뒤 npm install을 실행하면 됩니다.
 
-## Quick Start
+## 빠른 사용 예시
 
-Create a generation brief from a prompt:
+프롬프트에서 생성 brief 만들기:
 
 ```bash
 visual-asset-pipeline brief \
@@ -96,7 +88,7 @@ visual-asset-pipeline brief \
   --output work/forest-assets
 ```
 
-Generate an image sheet from `work/forest-assets/generation_brief.json` with your image model, then extract assets:
+생성된 이미지 시트에서 에셋 추출:
 
 ```bash
 visual-asset-pipeline extract \
@@ -108,7 +100,7 @@ visual-asset-pipeline extract \
   --sizes 128,256,512,1024
 ```
 
-Normalize a folder of already-separated images:
+이미 분리된 이미지 폴더 정규화:
 
 ```bash
 visual-asset-pipeline normalize \
@@ -118,15 +110,13 @@ visual-asset-pipeline normalize \
   --sizes 256,512
 ```
 
-## Output Package
+## 출력물
 
 ![Output package](docs/assets/package-outputs.png)
 
-Each extraction can produce:
-
 - `png/<size>/*.png`
 - `webp/<size>/*.webp`
-- `svg/*.svg` when a vectorizer is available
+- `svg/*.svg` optional
 - `sprites/sprite_<size>.png`
 - `sprites/sprite_<size>.json`
 - `metadata.json`
@@ -135,72 +125,41 @@ Each extraction can produce:
 - `crop_preview.png`
 - `visual_asset_package.zip`
 
-The output is designed for Figma, React, Flutter, iOS, Android, web apps, Unity, Godot, and other game engines.
+이 결과물은 Figma, React, Flutter, iOS, Android, 웹 앱, Unity, Godot 같은 환경에서 바로 쓸 수 있도록 설계되어 있습니다.
 
 ## Crop Preview Overlay
 
 ![Crop preview overlay](docs/assets/crop-preview-overlay.png)
 
-Extraction runs write `crop_preview.png` beside the exported assets. Red boxes show the final padded crop area, faint white boxes show the raw visual detection, and numbered labels map the preview back to `metadata.json`. This makes tight cuts visible before the files move into Figma, apps, or game engines.
+추출을 실행하면 export 폴더에 `crop_preview.png`도 함께 생성됩니다. 빨간 박스는 padding이 적용된 최종 crop 영역이고, 옅은 흰 박스는 원래 detection 영역입니다. 번호는 metadata와 연결되므로 어떤 에셋이 어떻게 잘릴지 바로 확인할 수 있습니다.
 
-## Codex Skill
+## Codex Skill 설치
 
-The installable Codex skill is included at `skill/visual-asset-pipeline`.
+Skill은 `skill/visual-asset-pipeline`에 포함되어 있습니다.
 
 ```bash
 cp -R skill/visual-asset-pipeline "${CODEX_HOME:-$HOME/.codex}/skills/"
 ```
 
-Then invoke it in Codex:
+Codex에서 이렇게 사용할 수 있습니다.
 
 ```text
 Use $visual-asset-pipeline to extract this character sheet into transparent PNG, WebP, sprite sheet, ZIP, and metadata.
 ```
 
-## Asset Profiles
+## Profile
 
-| Profile | Best For | Normalization Intent |
-| --- | --- | --- |
-| `icon` | Symbol packs, app icons, badges | Square canvas, centered symbol, consistent padding |
-| `character` | Character poses, mascots, avatar sheets | Preserve full body, align visual weight, avoid cropped limbs |
-| `sprite` | Game frames, props, effects | Frame-ready scale, sprite sheet export, atlas metadata |
-| `web` | Landing-page images, logos, illustrations | Preserve useful shape, responsive export sizes |
-| `ui` | Buttons, badges, states, app visuals | Group variants and keep state-friendly naming |
-| `sticker` | Stickers, emotes, decals | Preserve outline/glow and generous transparent padding |
-| `auto` | Unknown or mixed sheets | Use conservative general-purpose extraction |
+| Profile | 용도 |
+| --- | --- |
+| `icon` | 아이콘, 심볼, 배지 |
+| `character` | 캐릭터 포즈, 마스코트, 아바타 |
+| `sprite` | 게임 프레임, prop, effect |
+| `web` | 랜딩페이지 이미지, 로고, 일러스트 |
+| `ui` | 버튼, 배지, 상태 variant |
+| `sticker` | 스티커, 이모트, outline/glow cutout |
+| `auto` | 혼합 또는 알 수 없는 시트 |
 
-## Architecture
-
-```text
-src/visual_asset_pipeline/
-├── analysis.py        # input inspection and layout metadata
-├── detection.py       # visual asset localization
-├── segmentation.py    # foreground masks and background removal
-├── cleanup.py         # captions, guide lines, artifacts, and noise
-├── normalization.py   # optical centering and profile-aware canvas export
-├── validation.py      # quality gates, duplicates, and style checks
-├── naming.py          # deterministic semantic filenames
-├── packaging.py       # image exports, metadata, reports, sprites, ZIP
-└── cli.py             # command line interface
-```
-
-More detail:
-
-- [Architecture](docs/architecture.md)
-- [Library recommendations](docs/library-recommendations.md)
-- [Name candidates](docs/name-candidates.md)
-
-## Optional Enhancements
-
-The default pipeline runs locally with Pillow, NumPy, and scikit-image. Production deployments can swap in:
-
-- SAM, RMBG, or rembg for segmentation
-- CLIP, SigLIP, DINOv2, or a multimodal LLM for semantic naming and duplicate detection
-- OCR for stronger caption and label removal
-- vtracer, potrace, Illustrator, or a hosted vectorization service for SVG output
-- Figma, React, Flutter, iOS, Android, Unity, Godot, and TexturePacker code generators
-
-## Development
+## 개발
 
 ```bash
 python3 -m pip install -e ".[dev]"
@@ -208,12 +167,43 @@ pytest
 npm pack --dry-run
 ```
 
-## Roadmap
+## 구조
 
-- Profile-specific metadata: pivots, hitboxes, 9-slice, state groups, animation groups
-- Model-backed extraction adapters
-- True vector export pipeline
-- Multimodal semantic naming review UI
+```text
+src/visual_asset_pipeline/
+├── analysis.py        # 입력 분석과 레이아웃 메타데이터
+├── detection.py       # 시각적 에셋 위치 탐지
+├── segmentation.py    # foreground mask와 배경 제거
+├── cleanup.py         # 캡션, 가이드, 아티팩트, 노이즈 정리
+├── normalization.py   # optical centering과 profile 기반 export
+├── validation.py      # 품질 검사, 중복, 스타일 검사
+├── naming.py          # 의미 있는 파일명 생성
+├── packaging.py       # 이미지 export, 메타데이터, 리포트, ZIP
+└── cli.py             # 명령행 인터페이스
+```
+
+자세한 내용은:
+
+- [Architecture](docs/architecture.md)
+- [Library recommendations](docs/library-recommendations.md)
+- [Name candidates](docs/name-candidates.md)
+
+## 선택적 확장
+
+기본 파이프라인은 Pillow, NumPy, scikit-image로 로컬에서 동작합니다. 프로덕션에서는 아래를 교체하거나 추가할 수 있습니다.
+
+- SAM, RMBG, rembg를 segmentation에 사용
+- CLIP, SigLIP, DINOv2, 멀티모달 LLM으로 semantic naming과 duplicate detection 개선
+- OCR로 캡션과 라벨 제거 강화
+- vtracer, potrace, Illustrator, 호스팅 vectorization 서비스로 SVG 출력
+- Figma, React, Flutter, iOS, Android, Unity, Godot, TexturePacker용 코드 생성
+
+## 로드맵
+
+- pivots, hitbox, 9-slice, state group, animation group 같은 profile 전용 metadata
+- 모델 기반 extraction adapter
+- true vector export pipeline
+- 멀티모달 semantic naming 검토 UI
 - Figma plugin export
-- Framework and game-engine codegen
-- Visual regression benchmark suite with real-world asset sheets
+- 프레임워크와 게임 엔진용 codegen
+- 실제 에셋 시트로 만드는 visual regression benchmark suite

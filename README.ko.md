@@ -4,7 +4,7 @@
 
 **Visual Asset Pipeline**은 프롬프트, 여러 에셋이 들어 있는 이미지 시트, 웹페이지 캡처, 스케치, 이미지 폴더를 바로 쓸 수 있는 프로덕션 에셋 패키지로 변환하는 파이프라인입니다.
 
-[English](README.md) | [한국어](README.ko.md) | [日本語](docs/i18n/README.ja.md) | [简体中文](docs/i18n/README.zh-CN.md) | [Español](docs/i18n/README.es.md)
+[한국어](README.md) | [English](docs/i18n/README.en.md) | [日本語](docs/i18n/README.ja.md) | [简体中文](docs/i18n/README.zh-CN.md) | [Español](docs/i18n/README.es.md)
 
 > 현재 상태: alpha. 로컬 CV 기반 파이프라인은 동작하며, segmentation, semantic naming, OCR, SVG 변환은 교체 가능한 어댑터로 확장하도록 설계되어 있습니다.
 
@@ -20,14 +20,6 @@
 - 스티커, 이모트, 투명 컷아웃
 
 ![Asset profiles](docs/assets/asset-profiles.png)
-
-## 차별점
-
-- 완벽한 grid만 전제로 하지 않고, 지저분한 시각 입력에서도 foreground component를 기준으로 탐지합니다.
-- PNG, WebP, 선택 SVG, sprite sheet, metadata, validation report, contact sheet, crop preview, ZIP까지 실제 downstream 사용에 맞게 패키징합니다.
-- anti-aliasing, 그림자, outline, glow, optical centering 같은 품질 요소를 보존하도록 설계했습니다.
-- 파일명 생성, 검증, 중복 감지, 스타일 일관성 점검을 후처리 잡일이 아니라 파이프라인 일부로 다룹니다.
-- Codex skill, Python CLI, npm global CLI, `npx` one-off 실행을 모두 지원합니다.
 
 ## 파이프라인
 
