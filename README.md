@@ -6,12 +6,13 @@
 
 [한국어](README.md) | [English](docs/i18n/README.en.md) | [日本語](docs/i18n/README.ja.md) | [简体中文](docs/i18n/README.zh-CN.md) | [Español](docs/i18n/README.es.md)
 
+> 기본 진입점은 한국어입니다. English 문서는 위 링크에서 열 수 있습니다.
+
 > 현재 상태: alpha. 로컬 CV 기반 파이프라인은 동작하며, segmentation, semantic naming, OCR, SVG 변환은 교체 가능한 어댑터로 확장하도록 설계되어 있습니다.
 
 ## 지원 범위
 
 아이콘만을 위한 도구가 아닙니다. 아이콘은 여러 profile 중 하나입니다.
-
 - 아이콘, 심볼 팩
 - 캐릭터 시트, 포즈 보드
 - 스프라이트 시트, 게임 오브젝트
@@ -21,6 +22,13 @@
 
 ![Asset profiles](docs/assets/asset-profiles.png)
 
+## 차별점
+
+- 완벽한 grid만 전제로 하지 않고, 지저분한 시각 입력에서도 foreground component를 기준으로 탐지합니다.
+- PNG, WebP, 선택 SVG, sprite sheet, metadata, validation report, contact sheet, crop preview, ZIP까지 실제 downstream 사용에 맞게 패키징합니다.
+- anti-aliasing, 그림자, outline, glow, optical centering 같은 품질 요소를 보존하도록 설계했습니다.
+- 파일명 생성, 검증, 중복 감지, 스타일 일관성 점검을 후처리 잡일이 아니라 파이프라인 일부로 다룹니다.
+- Codex skill, Python CLI, npm global CLI, `npx` one-off 실행을 모두 지원합니다.
 ## 파이프라인
 
 ![Pipeline flow](docs/assets/pipeline-flow.png)
@@ -126,7 +134,6 @@ visual-asset-pipeline normalize \
 - `visual_asset_package.zip`
 
 이 결과물은 Figma, React, Flutter, iOS, Android, 웹 앱, Unity, Godot 같은 환경에서 바로 쓸 수 있도록 설계되어 있습니다.
-
 ## Crop Preview Overlay
 
 ![Crop preview overlay](docs/assets/crop-preview-overlay.png)

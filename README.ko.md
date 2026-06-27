@@ -6,12 +6,13 @@
 
 [한국어](README.md) | [English](docs/i18n/README.en.md) | [日本語](docs/i18n/README.ja.md) | [简体中文](docs/i18n/README.zh-CN.md) | [Español](docs/i18n/README.es.md)
 
+> 기본 진입점은 한국어입니다. English 문서는 위 링크에서 열 수 있습니다.
+
 > 현재 상태: alpha. 로컬 CV 기반 파이프라인은 동작하며, segmentation, semantic naming, OCR, SVG 변환은 교체 가능한 어댑터로 확장하도록 설계되어 있습니다.
 
 ## 지원 범위
 
 아이콘만을 위한 도구가 아닙니다. 아이콘은 여러 profile 중 하나입니다.
-
 - 아이콘, 심볼 팩
 - 캐릭터 시트, 포즈 보드
 - 스프라이트 시트, 게임 오브젝트
@@ -21,6 +22,13 @@
 
 ![Asset profiles](docs/assets/asset-profiles.png)
 
+## 차별점
+
+- 완벽한 grid만 전제로 하지 않고, 지저분한 시각 입력에서도 foreground component를 기준으로 탐지합니다.
+- PNG, WebP, 선택 SVG, sprite sheet, metadata, validation report, contact sheet, crop preview, ZIP까지 실제 downstream 사용에 맞게 패키징합니다.
+- anti-aliasing, 그림자, outline, glow, optical centering 같은 품질 요소를 보존하도록 설계했습니다.
+- 파일명 생성, 검증, 중복 감지, 스타일 일관성 점검을 후처리 잡일이 아니라 파이프라인 일부로 다룹니다.
+- Codex skill, Python CLI, npm global CLI, `npx` one-off 실행을 모두 지원합니다.
 ## 파이프라인
 
 ![Pipeline flow](docs/assets/pipeline-flow.png)
@@ -125,6 +133,7 @@ visual-asset-pipeline normalize \
 - `crop_preview.png`
 - `visual_asset_package.zip`
 
+이 결과물은 Figma, React, Flutter, iOS, Android, 웹 앱, Unity, Godot 같은 환경에서 바로 쓸 수 있도록 설계되어 있습니다.
 ## Crop Preview Overlay
 
 ![Crop preview overlay](docs/assets/crop-preview-overlay.png)
@@ -164,3 +173,44 @@ python3 -m pip install -e ".[dev]"
 pytest
 npm pack --dry-run
 ```
+
+## 구조
+
+```text
+src/visual_asset_pipeline/
+├── analysis.py        # 입력 분석과 레이아웃 메타데이터
+├── detection.py       # 시각적 에셋 위치 탐지
+├── segmentation.py    # foreground mask와 배경 제거
+├── cleanup.py         # 캡션, 가이드, 아티팩트, 노이즈 정리
+├── normalization.py   # optical centering과 profile 기반 export
+├── validation.py      # 품질 검사, 중복, 스타일 검사
+├── naming.py          # 의미 있는 파일명 생성
+├── packaging.py       # 이미지 export, 메타데이터, 리포트, ZIP
+└── cli.py             # 명령행 인터페이스
+```
+
+자세한 내용은:
+
+- [Architecture](docs/architecture.md)
+- [Library recommendations](docs/library-recommendations.md)
+- [Name candidates](docs/name-candidates.md)
+
+## 선택적 확장
+
+기본 파이프라인은 Pillow, NumPy, scikit-image로 로컬에서 동작합니다. 프로덕션에서는 아래를 교체하거나 추가할 수 있습니다.
+
+- SAM, RMBG, rembg를 segmentation에 사용
+- CLIP, SigLIP, DINOv2, 멀티모달 LLM으로 semantic naming과 duplicate detection 개선
+- OCR로 캡션과 라벨 제거 강화
+- vtracer, potrace, Illustrator, 호스팅 vectorization 서비스로 SVG 출력
+- Figma, React, Flutter, iOS, Android, Unity, Godot, TexturePacker용 코드 생성
+
+## 로드맵
+
+- pivots, hitbox, 9-slice, state group, animation group 같은 profile 전용 metadata
+- 모델 기반 extraction adapter
+- true vector export pipeline
+- 멀티모달 semantic naming 검토 UI
+- Figma plugin export
+- 프레임워크와 게임 엔진용 codegen
+- 실제 에셋 시트로 만드는 visual regression benchmark suite
