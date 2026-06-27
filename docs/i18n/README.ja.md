@@ -4,7 +4,7 @@
 
 **Visual Asset Pipeline** は、プロンプト、アセットシート、Webページのキャプチャ、スケッチ、画像フォルダを、すぐに使える制作向けアセットパッケージへ変換するパイプラインです。
 
-[English](../../README.md) | [한국어](../../README.ko.md) | [日本語](README.ja.md) | [简体中文](README.zh-CN.md) | [Español](README.es.md)
+[한국어](../../README.md) | [English](README.en.md) | [日本語](README.ja.md) | [简体中文](README.zh-CN.md) | [Español](README.es.md)
 
 ## Supported Assets
 

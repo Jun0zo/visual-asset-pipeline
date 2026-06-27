@@ -4,7 +4,7 @@
 
 **Visual Asset Pipeline**은 프롬프트, 여러 에셋이 들어 있는 이미지 시트, 웹페이지 캡처, 스케치, 이미지 폴더를 바로 쓸 수 있는 프로덕션 에셋 패키지로 변환하는 파이프라인입니다.
 
-[English](README.md) | [한국어](README.ko.md) | [日本語](docs/i18n/README.ja.md) | [简体中文](docs/i18n/README.zh-CN.md) | [Español](docs/i18n/README.es.md)
+[한국어](README.md) | [English](docs/i18n/README.en.md) | [日本語](docs/i18n/README.ja.md) | [简体中文](docs/i18n/README.zh-CN.md) | [Español](docs/i18n/README.es.md)
 
 > 현재 상태: alpha. 로컬 CV 기반 파이프라인은 동작하며, segmentation, semantic naming, OCR, SVG 변환은 교체 가능한 어댑터로 확장하도록 설계되어 있습니다.
 
